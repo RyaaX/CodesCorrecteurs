@@ -8,23 +8,31 @@ def generateMot(complexite):
     return mot
 
 
-def generateMatriceUnique(ligne, complexite):
+def generateMatriceAleatoire(ligne, complexite):
     mot = generateMot(complexite)
     M = np.array(mot)
-    for ligne in M:
-        print(np.equal(ligne,mot).all())
+    for nb in range(1,ligne):
+        bool = True
+        while bool:
+            mot = generateMot(complexite)
+            dedans = False
+
+            for l in M:
+                 dedans = dedans or np.equal(l,mot).all()
+
+            if not dedans:
+                M = np.vstack([M,mot])
+                bool = False
     return M
 
 
 def generateMatriceGeneratrice(ligne, complexite):
-    MG = 0
+    MG = "Pas assez de complexite"
     if(ligne <= complexite**2):
         M = np.identity(ligne)
-        G = generateMatriceUnique(ligne, complexite)
+        G = generateMatriceAleatoire(ligne, complexite)
         MG = np.concatenate((M,G),1)
-        print(M)
-        print(G)
     return MG
 
 
-print(generateMatriceGeneratrice(2,5))
+print(generateMatriceGeneratrice(4,3))
