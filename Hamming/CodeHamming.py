@@ -18,12 +18,6 @@ def genererErreur(message):
 
 def bitErreur(message):
     matriceControle = np.matrix([[0, 0, 0, 1, 1, 1, 1], [0, 1, 1, 0, 0, 1, 1], [1, 0, 1, 0, 1, 0, 1]])
-    for i in range (matriceControle.shape[1]) :
-        if np.allclose(message,matriceControle[:,i]):
-            print("erreur sur le bit : ",i+1)
-
-def bitErreur(message):
-    matriceControle = np.matrix([[0, 0, 0, 1, 1, 1, 1], [0, 1, 1, 0, 0, 1, 1], [1, 0, 1, 0, 1, 0, 1]])
     R=np.mod(np.dot(matriceControle,message),2)
     for i in range (matriceControle.shape[1]) :
         if np.allclose(R,matriceControle[:,i]):
