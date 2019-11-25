@@ -41,22 +41,28 @@ def decodeMessage(message):
 def differenceMatrice(matrice1,matrice2):
     for i in range(matrice1.shape[0]):
         if matrice1[i]==matrice2[i]:
-            print(colored(matrice2[i],'green'),end='')
+            print(colored(str(matrice2[i]).strip('[]'),'green')," ",end='')
         else:
-            print(colored(matrice2[i], 'red'),end='')
+            print(colored(str(matrice2[i]).strip('[]'), 'red')," ",end='')
     print()
 
 def afficheMatrice(matrice):
     res=np.copy(matrice)
     res.shape=(1,res.shape[0])
+    for i in range(matrice.shape[0]):
+        print(str(matrice[i]).strip('[]')," ",end='')
+    print()
     return res
 
 C=messageAlea()
-print("Donnée a transmettre = ",afficheMatrice(C))
+print("Donnée a transmettre = ")
+afficheMatrice(C)
 M=genererMessage(C)
-print("Message a envoyer = ",afficheMatrice(M))
+print("Message a envoyer = ")
+afficheMatrice(M)
 K=genererErreur(M)
-print("Message reçu = ",afficheMatrice(K))
+print("Message reçu = ")
+afficheMatrice(K)
 print("Affichage difference = ")
 differenceMatrice(M,K)
 i=bitErreur(K)
@@ -65,5 +71,6 @@ L=corrigerErreur(K,i)
 print("Message corrigé = ")
 differenceMatrice(M,L)
 P=decodeMessage(L)
-print("Message Décodé = ",afficheMatrice(P))
+print("Message Décodé = ")
+differenceMatrice(C,P)
 
