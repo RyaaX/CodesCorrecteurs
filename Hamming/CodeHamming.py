@@ -12,8 +12,9 @@ def genererMessage(message):
 
 def genererErreur(message):
     b=np.random.randint(len(message))
-    message[b]=(message[b]+1)%2
-    return message
+    res= np.copy(message)
+    res[b]=(res[b]+1)%2
+    return res
 
 def bitErreur(message):
     matriceControle = np.matrix([[0, 0, 0, 1, 1, 1, 1], [0, 1, 1, 0, 0, 1, 1], [1, 0, 1, 0, 1, 0, 1]])
@@ -29,8 +30,9 @@ def bitErreur(message):
             return i
 
 def corrigerErreur(message,i):
-    message[i]=(message[i]+1)%2
-    return message
+    res = np.copy(message)
+    res[i]=(res[i]+1)%2
+    return res
 
 def decodeMessage(message):
     D = np.matrix([[0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 1]])
@@ -39,22 +41,29 @@ def decodeMessage(message):
 def differenceMatrice(matrice1,matrice2):
     for i in range(matrice1.shape[0]):
         if matrice1[i]==matrice2[i]:
-            print(colored(matrice1[i],'green'))
+            print(colored(matrice2[i],'green'),end='')
         else:
-            print(colored(matrice1[i], 'red'))
+            print(colored(matrice2[i], 'red'),end='')
+    print()
 
+def afficheMatrice(matrice):
+    res=np.copy(matrice)
+    res.shape=(1,res.shape[0])
+    return res
 
 C=messageAlea()
-print("Donnée a transmettre = ",C)
+print("Donnée a transmettre = ",afficheMatrice(C))
 M=genererMessage(C)
-print("Message a envoyer = ",M)
+print("Message a envoyer = ",afficheMatrice(M))
 K=genererErreur(M)
-print("Message reçu = ",K)
+print("Message reçu = ",afficheMatrice(K))
 print("Affichage difference = ")
 differenceMatrice(M,K)
 i=bitErreur(K)
 print("Erreur sur le bit = ",i+1)
 L=corrigerErreur(K,i)
-print("Message corrigé = ",L)
+print("Message corrigé = ")
+differenceMatrice(M,L)
 P=decodeMessage(L)
-print("Message Décodé = ",P)
+print("Message Décodé = ",afficheMatrice(P))
+
