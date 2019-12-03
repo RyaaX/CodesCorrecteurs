@@ -54,7 +54,7 @@ def commentEstTrouveLeBitDErreur(message):
     print("La matrice de controle :")
     affichageMatriceComplete(matriceControle)
     print("Le message")
-    affichageMatriceComplete(message)
+    afficheMatrice(message)
     print("Le message * la matrice de controle")
     affichageMatriceComplete(R)
     affichageMatriceBitErreur(matriceControle,bitErreur(message))
@@ -62,17 +62,22 @@ def commentEstTrouveLeBitDErreur(message):
 def affichageMatriceComplete(matrice):
     for i in range(matrice.shape[0]):
         for j in range(matrice.shape[1]):
-                print(str(matrice.item((i,j))),end='')
+                print(str(matrice.item((i,j)))," ",end='')
         print()
 
 def affichageMatriceBitErreur(matrice,bit):
+    print(" 1  2  3  4  5  6  7")
+    print("---------------------")
     for i in range(matrice.shape[0]):
+        print('|',end='');
         for j in range(matrice.shape[1]):
             if(j==bit):
-                print(colored(str(matrice.item((i,j))),'green'),end='')
+                print(colored(str(matrice.item((i,j))),'green')," ",end='')
             else:
-                print(str(matrice.item((i,j))),end='')
+                print(str(matrice.item((i,j)))," ",end='')
+        print('|',end='');
         print()
+    print("---------------------")
     
 
 C=messageAlea()
