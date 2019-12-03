@@ -48,6 +48,33 @@ def afficheMatrice(matrice):
     print()
     return res
 
+def commentEstTrouveLeBitDErreur(message):
+    matriceControle = np.matrix([[0, 0, 0, 1, 1, 1, 1], [0, 1, 1, 0, 0, 1, 1], [1, 0, 1, 0, 1, 0, 1]])
+    R=np.mod(np.dot(matriceControle,message),2)
+    print("La matrice de controle :")
+    affichageMatriceComplete(matriceControle)
+    print("Le message")
+    affichageMatriceComplete(message)
+    print("Le message * la matrice de controle")
+    affichageMatriceComplete(R)
+    affichageMatriceBitErreur(matriceControle,bitErreur(message))
+
+def affichageMatriceComplete(matrice):
+    for i in range(matrice.shape[0]):
+        for j in range(matrice.shape[1]):
+                print(str(matrice.item((i,j))),end='')
+        print()
+
+def affichageMatriceBitErreur(matrice,bit):
+    for i in range(matrice.shape[0]):
+        for j in range(matrice.shape[1]):
+            if(j==bit):
+                print(colored(str(matrice.item((i,j))),'green'),end='')
+            else:
+                print(str(matrice.item((i,j))),end='')
+        print()
+    
+
 C=messageAlea()
 print("Donnée a transmettre = ")
 afficheMatrice(C)
@@ -67,4 +94,5 @@ differenceMatrice(M,L)
 P=decodeMessage(L)
 print("Message Décodé = ")
 differenceMatrice(C,P)
+commentEstTrouveLeBitDErreur(K)
 
