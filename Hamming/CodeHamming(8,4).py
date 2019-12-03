@@ -7,7 +7,6 @@ def messageAlea():
 
 def genererMessage(message):
     G=np.matrix([[1,1,0,1],[1,0,1,1],[1,0,0,0],[0,1,1,1],[0,1,0,0],[0,0,1,0],[0,0,0,1],[1,1,1,0]])
-    print(np.transpose(G))
     M=np.mod(np.dot(G,message),2)
     return M
 
@@ -18,12 +17,14 @@ def genererErreur(message):
     return res
 
 def bitErreur(message):
-    matriceControle = np.matrix([[0, 0, 0, 1, 1, 1, 1,0], [0, 1, 1, 0, 0, 1, 1,0], [1, 0, 1, 0, 1, 0, 1,0]])
+    matriceControle = np.matrix([[0, 0, 0, 1, 1, 1, 1, 0], [0, 1, 1, 0, 0, 1, 1, 0], [1, 0, 1, 0, 1, 0, 1, 0]])
     R=np.mod(np.dot(matriceControle,message),2)
-    print(R)
-    for i in range (matriceControle.shape[1]) :
-        if np.allclose(R,matriceControle[:,i]):
-            return i
+    if (R == np.zeros([1, 3])).all():
+        return -1
+    else:
+        for i in range(matriceControle.shape[1]):
+            if np.allclose(R, matriceControle[:, i]):
+                return i
 
 def corrigerErreur(message,i):
     res = np.copy(message)
@@ -56,16 +57,21 @@ afficheMatrice(C)
 M=genererMessage(C)
 print("Message a envoyer = ")
 afficheMatrice(M)
-K=genererErreur(M)
+#K=genererErreur(M)
+K=M
 print("Message reçu = ")
 afficheMatrice(K)
 print("Affichage difference = ")
 differenceMatrice(M,K)
 i=bitErreur(K)
-print("Erreur sur le bit = ",i+1)
-L=corrigerErreur(K,i)
-print("Message corrigé = ")
-differenceMatrice(M,L)
+if i == -1:
+    print("Pas d'erreurs dans le message reçu")
+    L = K
+else:
+    print("Erreur sur le bit = ", i + 1)
+    L = corrigerErreur(K, i)
+    print("Message corrigé = ")
+    differenceMatrice(M, L)
 P=decodeMessage(L)
 print("Message Décodé = ")
 differenceMatrice(C,P)
