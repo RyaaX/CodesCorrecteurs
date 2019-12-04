@@ -14,9 +14,10 @@ def genererMessage(message):
 
 def genererErreur(message, s):
     res = np.copy(message)
-    for i in range(s):
-        b = np.random.randint(len(message))
-        res[b] = (res[b] + 1) % 2
+    if s > 0:
+        for i in range(s):
+            b = np.random.randint(len(message))
+            res[b] = (res[b] + 1) % 2
     return res
 
 
