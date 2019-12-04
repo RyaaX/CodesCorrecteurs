@@ -28,27 +28,6 @@ def calculHamming(Mot1, Mot2, nbBit):
                 distance = distance + 1
     return distance
 
-def verifierGenerateur(matrice, nbBit, complexite):
-    init = np.array([[0]])
-    listMot = 0
-    minHam = -1
-    for k in range(0, nbBit-1):
-        init = np.vstack([init, 0])
-    for k in range(1, 2 ** nbBit+1):
-        motCode = init * matrice
-
-        if k == 1:
-            listMot = np.array([motCode])
-        else:
-            listMot = np.vstack([listMot, [motCode]])
-            for g in range(1,k-1):
-                distance = calculHamming(motCode, listMot[g], nbBit+complexite)
-                if minHam == -1 or minHam > distance:
-                    minHam = distance
-
-        init = ajoutUnBinaire(init)
-    return minHam
-
 def generateMatriceAleatoire(ligne, complexite):
     mot = generateMot(complexite)
     M = np.array([mot])
