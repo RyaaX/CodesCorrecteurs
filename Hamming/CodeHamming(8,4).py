@@ -13,10 +13,11 @@ def genererMessage(message):
     return M
 
 
-def genererErreur(message):
-    b = np.random.randint(len(message))
+def genererErreur(message,s):
     res = np.copy(message)
-    res[b] = (res[b] + 1) % 2
+    for i in range(s):
+        b = np.random.randint(len(message))
+        res[b] = (res[b] + 1) % 2
     return res
 
 
@@ -26,9 +27,20 @@ def bitErreur(message):
     if (R == np.zeros([1, 3])).all():
         return -1
     else:
-        for i in range(matriceControle.shape[1]):
-            if np.allclose(R, matriceControle[:, i]):
-                return i
+        if parite(message)!=message[7] :
+            print('erreur bit parite')
+            for i in range(matriceControle.shape[1]):
+                if np.allclose(R, matriceControle[:, i]):
+                    return i
+        else :
+            return -2
+
+def parite(message):
+    cpt=0
+    for i in range(message.shape[0]-1):
+        cpt +=message[i]
+    return cpt%2
+
 
 
 def corrigerErreur(message, i):
@@ -67,7 +79,8 @@ afficheMatrice(C)
 M = genererMessage(C)
 print("Message a envoyer = ")
 afficheMatrice(M)
-K = genererErreur(M)
+s = input('Nombre erreurs a inserer')
+K = genererErreur(M, int(s))
 print("Message reçu = ")
 afficheMatrice(K)
 print("Affichage difference = ")
@@ -76,11 +89,15 @@ i = bitErreur(K)
 if i == -1:
     print("Pas d'erreurs dans le message reçu")
     L = K
-else:
+elif i==-2 :
+    print('Au moins deux erreurs')
+    print('On ne peut pas decoder le message, il faut le renvoyer')
+else :
     print("Erreur sur le bit = ", i + 1)
     L = corrigerErreur(K, i)
     print("Message corrigé = ")
     differenceMatrice(M, L)
-P = decodeMessage(L)
-print("Message Décodé = ")
-differenceMatrice(C, P)
+if i!=-2 :
+    P = decodeMessage(L)
+    print("Message Décodé = ")
+    differenceMatrice(C, P)

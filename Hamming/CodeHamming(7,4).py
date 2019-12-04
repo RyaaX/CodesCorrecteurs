@@ -12,11 +12,13 @@ def genererMessage(message):
     return M
 
 
-def genererErreur(message):
-    b = np.random.randint(len(message))
+def genererErreur(message, s):
     res = np.copy(message)
-    res[b] = (res[b] + 1) % 2
+    for i in range(s):
+        b = np.random.randint(len(message))
+        res[b] = (res[b] + 1) % 2
     return res
+
 
 
 def bitErreur(message):
@@ -96,7 +98,8 @@ afficheMatrice(C)
 M = genererMessage(C)
 print("Message a envoyer = ")
 afficheMatrice(M)
-K = genererErreur(M)
+s = input('Nombre erreurs a inserer')
+K = genererErreur(M, int(s))
 print("Message reçu = ")
 afficheMatrice(K)
 print("Affichage difference = ")
