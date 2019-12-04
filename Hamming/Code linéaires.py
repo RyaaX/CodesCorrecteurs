@@ -78,8 +78,8 @@ def generateMatriceGeneratrice(ligne, complexite):
         MG = np.concatenate((M, G), 1)
     return MG   
 
-M = generateMatriceGeneratrice(3, 10)
-H = verifierGenerateur(M, 3, 10)
+M = generateMatriceGeneratrice(5, 30)
+H = verifierGenerateur(M, 5, 30)
 
 print("Matrice : ")
 print(M)
