@@ -66,8 +66,14 @@ def partie(message,a):
         retour[k-a]=message[k]
     return retour
 
+def affichageMatriceComplete(matrice):
+    for i in range(matrice.shape[0]):
+        for j in range(matrice.shape[1]):
+            print(str(matrice.item((i, j))), " ", end='')
+        print()
 
-
+print("la matrice génératrice = ")
+affichageMatriceComplete(MatGeneratrice)
 message = messageAlea()
 message=np.matrix('1;0;1;1;1;0;0;1;1;0;1;1')
 print("Donnée a transmettre = ")
@@ -81,7 +87,7 @@ afficheMatrice(K)
 print("Affichage difference = ")
 differenceMatrice(M, K)
 partieDonnees=partie(K,0)
-partiePartie=partie(K,12)
+partiePartie=partie(K,11)
 print(" Partie données = ")
 afficheMatrice(partieDonnees)
 print(" Partie parité = ")
