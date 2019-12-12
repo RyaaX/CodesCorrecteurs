@@ -3,8 +3,15 @@ from random import *
 
 def generateMot(complexite):
     mot = np.array([])
-    for k in range(0, complexite):
-        mot = np.insert(mot, k, randint(0, 1))
+    compteur = 0
+    while compteur <= 1:
+        mot = np.array([])
+        compteur = 0
+        for k in range(0, complexite):
+            bit = randint(0, 1)
+            mot = np.insert(mot, k, bit)
+            if bit == 1:
+                compteur = compteur+1
     return mot
 
 def ajoutUnBinaire(mot):
@@ -29,18 +36,43 @@ def calculHamming(Mot1, Mot2, nbBit):
     return distance
 
 def generateMatriceAleatoire(ligne, complexite):
-    mot = generateMot(complexite)
+    mot = generateMot(ligne)
     M = np.array([mot])
-    for nb in range(1, ligne):
-        bool = True
-        while bool:
-            mot = generateMot(complexite)
-            dedans = False
+    bon = True
+    nbEssaie = 0
+    while bon:
+        nbEssaie += 1
+        if nbEssaie == 1000:
+            raise TimeoutError("Pas de solution trouvé")
+        mot = generateMot(ligne)
+        M = np.array([mot])
+        for nb in range(1, complexite):
+            bool = True
+            while bool:
+                mot = generateMot(ligne)
+                dedans = False
 
-            for l in M:
-                dedans = dedans or np.equal(l, mot).all()
+                for l in M:
+                    dedans = dedans or np.equal(l, mot).all()
 
-            if not dedans:
-                M = np.vstack([M, mot])
-                bool = False
+                if not dedans:
+                    M = np.vstack([M, mot])
+                    bool = False
+        M = np.transpose(M)
+        c = 0
+        bon = False
+        for l in M:
+            g = 0
+            compteur = 0
+            for bit in l:
+                if bit == 1:
+                    compteur = compteur+1
+            if compteur <= 1:
+                bon = True
+                break
+            for p in M:
+                if g != c:
+                    bon = bon or np.equal(l, p).all()
+                g += 1
+            c += 1
     return M
