@@ -1,19 +1,24 @@
 import numpy as np
 from termcolor import colored
+# Simule le fonctionnement de la transmission d'un message  avec un code correcteur de Hamming(8,4) qui détecte et corrige une erreur, ou détecte un nombre pair d'erreurs.
+# Le programme demande le nombre d'erreurs à insérer, 4 cas possibles.
+# -0 : il n'y a pas d'erreurs lors de la transmission le programme affiche les données normalement
+# -1 : Une erreur lors de la transmission, le programme la détecte et la corrige
+# -2,4,6 : Le programme détecte un nombre pair d'erreurs grâce au bit de parité supplémentaire, il demande la retransmission du message
+# -3,5,7 : le programme détecte une erreur sur un bit aléatoire, les données sont corrompus
 
-
-def messageAlea():
+def messageAlea(): #génére et renvoie un message de données de 4 bits à transmettre
     return np.random.randint(2, size=(4, 1))
 
 
-def genererMessage(message):
+def genererMessage(message): #génére le message de 7 bits à envoyer
     G = np.matrix([[1, 1, 0, 1], [1, 0, 1, 1], [1, 0, 0, 0], [0, 1, 1, 1], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1],
                    [1, 1, 1, 0]])
     M = np.mod(np.dot(G, message), 2)
     return M
 
 
-def genererErreur(message, s):
+def genererErreur(message, s): #permet de simuler un nombre s d'erreurs
     res = np.copy(message)
     if s > 0:
         for i in range(s):
@@ -22,41 +27,41 @@ def genererErreur(message, s):
     return res
 
 
-def bitErreur(message):
+def bitErreur(message): #renvoie le bit sur lequel il ya une erreur
     matriceControle = np.matrix([[0, 0, 0, 1, 1, 1, 1, 0], [0, 1, 1, 0, 0, 1, 1, 0], [1, 0, 1, 0, 1, 0, 1, 0]])
     R = np.mod(np.dot(matriceControle, message), 2)
     if (R == np.zeros([1, 3])).all():
-        return -1
+        return -1   #si il n'y a pas d'erreurs, R est une matrice nulle
     else:
-        if parite(message) != message[7]:
+        if parite(message) != message[7]: # Si le bit de parité global n'est pas bon, il y un nombre impair d'erreur
             print('erreur bit parite')
             for i in range(matriceControle.shape[1]):
                 if np.allclose(R, matriceControle[:, i]):
-                    return i
+                    return i # on renvoie donc le bit sur lequel il ya une erreur (le code renvoie un bit aleatoire si il y a 3 ou plus erreur)
         else:
-            return -2
+            return -2 # Si le bit de parité global est bon, il y un nombre pair d'erreur, on ne peut pas le corriger
 
 
-def parite(message):
+def parite(message): #permet de determiner la parite d'un message
     cpt = 0
     for i in range(message.shape[0] - 1):
         cpt += message[i]
     return cpt % 2
 
 
-def corrigerErreur(message, i):
+def corrigerErreur(message, i): #permet d'inverser le bit n°i du message
     res = np.copy(message)
     res[i] = (res[i] + 1) % 2
     return res
 
 
-def decodeMessage(message):
+def decodeMessage(message): # decode le message, prend 8 bits en entrée et renvoie 4 bits
     D = np.matrix(
         [[0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0]])
     return np.mod(np.dot(D, message), 2)
 
 
-def differenceMatrice(matrice1, matrice2):
+def differenceMatrice(matrice1, matrice2): #affichage de différence de 2 matrices, les bit équivalents sont en vert, les différents sont en rouge
     for i in range(matrice1.shape[0]):
         if matrice1[i] == matrice2[i]:
             print(colored(str(matrice2[i]).strip('[]'), 'green'), " ", end='')
@@ -65,7 +70,7 @@ def differenceMatrice(matrice1, matrice2):
     print()
 
 
-def afficheMatrice(matrice):
+def afficheMatrice(matrice): #permet un affichage propre de matrices colonnes
     res = np.copy(matrice)
     res.shape = (1, res.shape[0])
     for i in range(matrice.shape[0]):
@@ -82,9 +87,9 @@ print("Message a envoyer = ")
 afficheMatrice(M)
 s = input('Nombre erreurs a inserer (entier entre 0 et 8) : ')
 K = genererErreur(M, int(s))
-print("Message reçu = ")
+print("Message reçu (avec erreurs) = ")
 afficheMatrice(K)
-print("Affichage difference = ")
+print("Affichage difference (erreurs en rouge) = ")
 differenceMatrice(M, K)
 i = bitErreur(K)
 if i == -1:
