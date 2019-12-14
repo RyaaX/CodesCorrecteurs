@@ -2,7 +2,7 @@ import numpy as np
 from termcolor import colored
 
 
-MatGeneratrice = np.matrix([
+MatGeneratrice = np.matrix([ 
                [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -11,7 +11,7 @@ MatGeneratrice = np.matrix([
                [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
                [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
                [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+               [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],						
                [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -29,15 +29,15 @@ MatGeneratrice = np.matrix([
                ])
 
 
-def genererMessage(message):
+def genererMessage(message): #génére le message de 24 bits à envoyer
     M = np.mod(np.dot(MatGeneratrice, message), 2)
     return M
 
 
-def messageAlea():
+def messageAlea(): #génére et renvoie un message de données de 12 bits à transmettre
     return np.random.randint(2, size=(12, 1))
 
-def afficheMatrice(matrice):
+def afficheMatrice(matrice): #permet un affichage propre de matrices colonnes
     res = np.copy(matrice)
     res.shape = (1, res.shape[0])
     for i in range(matrice.shape[0]):
@@ -45,14 +45,14 @@ def afficheMatrice(matrice):
     print()
     return res
 
-def genererErreur(message, s):
+def genererErreur(message, s):#permet de simuler un nombre s d'erreurs
     res = np.copy(message)
     for i in range(s):
         b = np.random.randint(len(message))
         res[b] = (res[b] + 1) % 2
     return res
 
-def differenceMatrice(matrice1, matrice2):
+def differenceMatrice(matrice1, matrice2): #affichage de différence de 2 matrices, les bit équivalents sont en vert, les différents sont en rouge
     for i in range(matrice1.shape[0]):
         if matrice1[i] == matrice2[i]:
             print(colored(str(matrice2[i]).strip('[]'), 'green'), " ", end='')
@@ -60,13 +60,13 @@ def differenceMatrice(matrice1, matrice2):
             print(colored(str(matrice2[i]).strip('[]'), 'red'), " ", end='')
     print()
 
-def partie(message,a):
+def partie(message,a): #retourn la partie du message compri entre le bit a et a+12
     retour = np.matrix('0;0;0;0;0;0;0;0;0;0;0;0')
     for k in range(a,a+12):
         retour[k-a]=message[k]
     return retour
 
-def affichageMatriceComplete(matrice):
+def affichageMatriceComplete(matrice): #permet d'afficher des matrices
     for i in range(matrice.shape[0]):
         for j in range(matrice.shape[1]):
             print(str(matrice.item((i, j))), " ", end='')
