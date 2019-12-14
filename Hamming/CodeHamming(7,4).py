@@ -1,7 +1,10 @@
 import numpy as np
 from termcolor import colored
-# Simule le fonctionnement de la transmission d'un message  avec un code correcteur de Hamming(7,4)
-# Le programme demande le nombre d'erreurs à insérer, le code de Hamming(7,4) ne détecte qu'une seule erreur.
+# Simule le fonctionnement de la transmission d'un message  avec un code correcteur de Hamming(7,4) qui détecte et corrige une erreur
+# Le programme demande le nombre d'erreurs à insérer, 3 cas :
+# -0 : il n'y a pas d'erreurs lors de la transmission le programme affiche les données normalement
+# -1 : Une erreur lors de la transmission, le programme la détecte et la corrige
+# ->1 : plus qu'une erreur, le programme détecte une erreur sur un bit aléatoire, les données sont corrompus
 
 def messageAlea(): #génére et renvoie un message de données de 4 bits à transmettre
     return np.random.randint(2, size=(4, 1))
