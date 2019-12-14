@@ -1,6 +1,7 @@
 import numpy as np
 from termcolor import colored
-
+# Simule le fonctionnement de la transmission d'un message  avec un code correcteur de golay (24,12,8)
+# Le programme creer le message à envoyé , genére des erreurs et separe le message pour identifier les erreurs.
 
 MatGeneratrice = np.matrix([ 
                [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
